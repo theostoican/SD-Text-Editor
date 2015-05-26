@@ -1,0 +1,31 @@
+Stoican Theodor - 313CA - Tema2 - SD
+
+README
+Fisiere incluse : backend.h backend.cpp list.h stack.h
+
+In general, de-a lungul intregii implementari, metodele implementate in fisierul backend.cpp apeleaza alte metode implementate in list.h (adica
+in fisierul aferent listei STL-like), care lucreaza in mod direct pe lista. Unde a fost cazul, a trebuit sa "iterez" prin lista direct din clasa
+Backend, avand in interiorul clase LinkedList metode care returneaza pointeri la anumite noduri din lista si, astfel, voi putea itera prin lista
+in mod direct.
+
+Ideea de baza in implementare consta in amenajarea unor metode in clasa LinkedList, astfel incat, in momentul in care se va accesa o metoda din
+Backend, fie copy, cut sau paste, aceste metode sa-mi returneze pointerii aferenti nodurilor intre care se va insera sau dintre care se va sterg
+(in cazul cut si delete). Cele mai importante metode sunt "searchstart" si "searchstop", care, asa cum am spus, itereaza pe baza indecsilor
+primiti(nr naturale) si determina nodurile aferente. O problema oarecum bizara, intalnita in implementarea acestor metode, a fost in momentul in
+care se apela functia cut pentru 2 indecsi, cu mentiunea ca primul index era mai mare decat celalalt. In acest caz, a trebuit sa includ in acel
+"if" conditia ca lungimea calculata pe fiecare nod sa fie mai mica decat diferenta dintre indecsi. Cum diferenta dintre indecsi e negativa in
+acest caz, iar lungimea pozitiva, problema s-a rezolvat.
+
+In general, m-am folosit de diverse metode clasice specifice clasei lista, de tipul removeLast, addFirst s.a.m.d., pentru a facilita
+implementarea celorlalte. Metoda printlist din interiorul clasei LinkedList, nu face decat sa-i trimita string-ul celeilalte metode, apelata
+direct din Backend (GetText). Acum, voi povesti putin despre modul in care sunt implementate metodele din Backend. Ideea la copy este de a apela
+cele 2 functii, searchstart si searchstop, care returneaza indecsii aferenti textului si de a pastra continutul textului in clipboard. 
+Clipboardul este implementat sub forma unei liste de stringuri, care pastreaza nod cu nod ce este intre cei doi indecsi. Intr-un mod similar 
+functioneaza si metoda cut, cu exceptia faptului ca, aceasta va sterge si continutul dintre cei 2 indecsi, prin apelarea unei metode specifice. 
+Functia paste, spre deosebire de celelalte, va obtine doar nodul aferent indexului de start, urmand ca dupa aceea sa itereze cu un pointer prin 
+text, pana va gasi indexul de capat. Evident, in functie de acest ultim nod, se va apela o metoda specifica (fie add sau addLast), care nu va 
+"bruia" lista, introducand ce este in clipboard unde trebuie.
+
+In final, functiile Undo si Redo au fost implementate folosind 2 stive de liste(stivele insele fiind implementate ca liste). Mecanismul este
+urmatorul: se da push pe stiva "undo" la fiecare cut, paste sau remove, iar pe stiva "redo" la fiecare operatie de undo. Exista si niste cazuri
+speciale, si anume, acela in care cele 2 stive sunt goale, nu se va returna nimic.
